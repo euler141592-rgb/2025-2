@@ -5,7 +5,6 @@ import time
 st.set_page_config(layout="wide")
 st.title("🏫 서울국제고 F3 선생님과의 데이트 시뮬레이션")
 
-# 사용자 이름 입력 받기 (st.text_input 사용)
 # st.session_state는 Streamlit에서 변수 상태를 유지하기 위해 사용됩니다.
 if 'name' not in st.session_state:
     st.session_state.name = ''
@@ -18,7 +17,7 @@ if st.session_state.name == '':
     if user_input:
         st.session_state.name = user_input
         st.session_state.stage = 1
-        st.experimental_rerun() # 이름 입력 후 페이지 새로고침
+        st.rerun() # 이름 입력 후 페이지 새로고침 (수정 완료)
 
 # --- 2. 다이얼로그 및 스토리 진행 ---
 if st.session_state.stage >= 1:
@@ -71,10 +70,10 @@ if st.session_state.stage >= 1:
             # 다음 대사 버튼
             if st.button('엔터키 (다음 대사)'):
                 st.session_state.dialogue_index += 1
-                st.experimental_rerun()
+                st.rerun() # (수정 완료)
         else:
             st.session_state.stage = 2
-            st.experimental_rerun() # 다음 스테이지로 이동
+            st.rerun() # 다음 스테이지로 이동 (수정 완료)
 
 # --- 3. 음식 선택 (라디오 버튼 사용) ---
 if st.session_state.stage == 2:
@@ -96,7 +95,7 @@ if st.session_state.stage == 2:
         st.write(f'✅ {name}님이 선택한 음식은 **{selected_food}** 입니다.')
         
         st.session_state.stage = 3
-        st.experimental_rerun()
+        st.rerun() # (수정 완료)
 
 # --- 4. 음식 선택 결과 및 퀴즈 시작 ---
 if st.session_state.stage == 3:
@@ -138,10 +137,10 @@ if st.session_state.stage == 3:
         
         if st.button('계속하려면 엔터키를 누르십시오'):
             st.session_state.dialogue_index_2 += 1
-            st.experimental_rerun()
+            st.rerun() # (수정 완료)
     else:
         st.session_state.stage = 4
-        st.experimental_rerun()
+        st.rerun() # (수정 완료)
 
 # --- 5. 퀴즈 진행 (반복문 대체) ---
 if st.session_state.stage == 4:
@@ -160,15 +159,15 @@ if st.session_state.stage == 4:
             if user_answer == st.session_state.quiz_answers[quiz_idx]:
                 st.success("✅ 정답입니다!")
                 st.session_state.quiz_index += 1
-                time.sleep(1) # 잠시 멈췄다가 다음 문제로 이동
-                st.experimental_rerun()
+                # time.sleep(1) # 웹 환경에서는 time.sleep 대신 st.rerun으로 대체하는 것이 좋습니다.
+                st.rerun() # 다음 문제로 이동 (수정 완료)
             elif user_answer in ['O', 'X']:
                 st.error("❌ 오답입니다. 다시 입력하세요.")
             else:
                 st.warning("정답은 O 또는 X만 입력해야 합니다.")
     else:
         st.session_state.stage = 5
-        st.experimental_rerun()
+        st.rerun()
 
 # --- 6. 엔딩 ---
 if st.session_state.stage == 5:
@@ -187,6 +186,7 @@ if st.session_state.stage == 5:
     ]
     
     # 엔딩 출력
+    st.subheader("🎉 에필로그")
     for line in dialogues_ending:
         st.text(line)
     
@@ -196,13 +196,13 @@ if st.session_state.stage == 5:
 ⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢀⣿⣿⡿⠟⠙⠛⠛⠁⠀⠈⠙⢿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣿⣿⡿⠟⠠⠛⠛⠁⠀⠈⠙⢿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⣼⣿⣿⠀⠀⠊⣉⡙⠆⣤⣞⡉⠃⢸⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀
  ⠀⠀⠀⠀⠀⣻⣿⣿⡆⠀⠀⠈⢁⣠⣈⡛⠁⠀⢸⣿⡟⠀⠀⢀⢀⠀⠀⠀⠀
 ⠀ ⠀⠀⠀⢰⣿⣿⣿⣿⠃⠀⠀⠰⣯⣼⣿⣿⠀⠀⠀⢻⣿⣦⡀⡏⠉⠑⡄  ⠀
  ⠀⠀⠀⣾⣿⣿⣿⡇⠀⠀⠀⠀⠙⠿⠿⠋⠀⠀⠀⠈⣿⣿⡃⢱⠀⠀⡇⠀⠀⠀
-⠀⠀⠀⢸⣿⣿⣿⣷⠤⣄⣀⣀⣀⠀⠀⠀⠀⢀⡠⠾⠿⠟⢡⠃⠀⠀⡇⠀⠀⠀
+⠀⠀⠀⢸⣿⣿⣿⣷⠤⣄⣀⣀⣀⠀⠀⠀⠀⢀⡠⠾⠿⠟⢡⠃⠀⠀⡇⠀
  ⠀⠀⠀⠈⠙⠓⠀⠀⠀⣴⣿⣧⣼⣽⣷⣾⣟⠉⠉⠒⠒⠊⠀⠀⠀⡇⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⣠⠎⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⢀⠜⣽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣀⡤⠖⠋⠀   ⠀⠀
